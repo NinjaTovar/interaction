@@ -94,7 +94,7 @@ class Earth
     draw(ctx)
     {
 
-        console.log(this.x);
+        //console.log(this.x);
         // If field "isHeadingRight" is false, play fly left animation
         if (this.isHeadingRight)
         {

@@ -37,27 +37,7 @@ class GameEngine
         this.surfaceHeight = this.ctx.canvas.height;
         this.timer = new Timer();
 
-        // Setup slider for solar mass
-        var slider = document.getElementById('size');
-        var output = document.getElementById('mass');
-        output.innerHTML = slider.value;
-        slider.oninput = function ()
-        {
-            var num = this.value;
 
-            if (num >= 0)
-            {
-                if (num == 0)
-                    num++;
-                output.innerHTML = num;
-
-            }
-            else
-            {
-                num = -1 / num;
-                output.innerHTML = num;
-            }
-        }
 
 
         // Setup HTML Buttons
@@ -91,12 +71,40 @@ class GameEngine
             y: this.surfaceHeight / 2,
             width: 547,
             height: 558,
+            orgScale: .2,
             scale: .2
         };
 
-        this.addEntity(new Sun(this, this.sunsOrigin.x, this.sunsOrigin.y, this.sunsOrigin.scale));
+        this.addEntity(new Sun(this, this.sunsOrigin));
         this.addEntity(new Earth(this, this.sunsOrigin, .08));
 
+        // Setup slider for solar mass
+        var slider = document.getElementById('size');
+        var output = document.getElementById('mass');
+        output.innerHTML = slider.value;
+
+        var that = this;
+        slider.oninput = function ()
+        {
+            var num = this.value;
+
+            if (num >= 0)
+            {
+                if (num == 0)
+                    num++;
+                output.innerHTML = num;
+
+                that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
+
+            }
+            else
+            {
+                num = -1 / num;
+                output.innerHTML = num;
+
+                that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
+            }
+        }
 
         // Set listeners
         this.initializeEventListeners();

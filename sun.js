@@ -16,7 +16,7 @@ class Sun
      * @param {any} startY Starting x position of the fly being constructed.
      * @param {any} size Size of scale for character.
      */
-    constructor(game, startX, startY, size, isHeadingRight)
+    constructor(game, sunsOrigin)
     {
         this.hover = new Animation
             (
@@ -27,15 +27,17 @@ class Sun
             0.1,    // frame duration
             1,      // frames in animation
             true,   // to loop or not to loop
-            size    // scale in relation to original image
+            sunsOrigin.scale    // scale in relation to original image
             );
 
-        this.x = startX;
-        this.y = startY;
+        this.sunsOrigin = sunsOrigin;
+        this.x = this.sunsOrigin.x;
+        this.y = this.sunsOrigin.y;
         this.speed = 20;
         this.game = game;
         this.ctx = game.ctx;
-        this.isHeadingRight = isHeadingRight;
+        this.isHeadingRight = true;
+        this.currentScale = this.sunsOrigin.scale;
 
 
 
@@ -73,6 +75,20 @@ class Sun
     /** Update handles updating the objects world state. */
     update()
     {
+        if (this.currentScale !== this.sunsOrigin.scale)
+        {
+            this.hover = new Animation
+                (
+                AM.getAsset('images/sun.png'),
+                547,    // frame width
+                558,     // frame height
+                1,      // sheet width
+                0.1,    // frame duration
+                1,      // frames in animation
+                true,   // to loop or not to loop
+                this.sunsOrigin.scale    // scale in relation to original image
+                );
+        }
         if (this.isHeadingRight)
         {
             //this.x += this.game.clockTick * this.speed;
