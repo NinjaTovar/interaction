@@ -4,7 +4,7 @@
  *
  * Single constructor takes in the game context as its parameter. (There is no default) 
  */
-class Earth
+class Planet
 {
     /**
      * Single constructor for Fly. Loads assets and sets intial parameters including
@@ -16,13 +16,13 @@ class Earth
      * @param {any} startY Starting x position of the fly being constructed.
      * @param {any} size Size of scale for character.
      */
-    constructor(game, sunsOrigin, size, solarDistance)
+    constructor(game, sunsOrigin, size, solarDistance, planetsOrigin)
     {
         this.hover = new Animation
             (
-            AM.getAsset('images/earth.png'),
-            511,    // frame width
-            513,     // frame height
+            AM.getAsset(planetsOrigin.planet),
+            planetsOrigin.frameWidth,    // frame width
+            planetsOrigin.frameHeight,     // frame height
             1,      // sheet width
             0.1,    // frame duration
             1,      // frames in animation
@@ -30,12 +30,13 @@ class Earth
             size    // scale in relation to original image
             );
 
+        this.planetsOrigin = planetsOrigin;
         this.sunsOrigin = sunsOrigin;
         this.x;
         this.y;
         this.prevX = this.x;
         this.prevY = this.y;
-        this.speed = 20;
+        this.speed = 2000;
         this.game = game;
         this.ctx = game.ctx;
         this.isHeadingRight = true;
@@ -44,8 +45,8 @@ class Earth
 
         // hit box
         this.size = size;
-        this.frameWidth = 511;
-        this.frameHeight = 513;
+        this.frameWidth = planetsOrigin.frameWidth;
+        this.frameHeight = planetsOrigin.frameHeight;
         this.hitBox = {
             xPos: this.x,
             yPos: this.y,
@@ -55,7 +56,7 @@ class Earth
         this.showOutline = false;
         this.destroyed = false;
 
-        this.earthsOrigins = {
+        this.planetsOrigins = {
             xPos: this.x + this.frameWidth * this.size,
             yPos: this.y + this.frameHeight * this.size
         };
@@ -90,16 +91,18 @@ class Earth
         }
         else 
         {
-            this.ctx.save();
+            this.ctx.restore();
             //this.ctx.beginPath();
             this.ctx.lineWidth = 2;
-            this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + .2 + ")";
-            this.ctx.setLineDash([2,20,30]);
+            this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + 1 + ")";
+            this.ctx.setLineDash([.5, 20]);
             //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
             this.ctx.moveTo(this.prevX, this.prevY);
             this.ctx.lineTo(this.x, this.y);
             this.ctx.stroke();
-            this.ctx.restore();
+            this.ctx.closePath();
+            this.ctx.save();
+            
         }
 
 
@@ -113,7 +116,7 @@ class Earth
         // If field "isHeadingRight" is false, play fly left animation
         if (this.isHeadingRight)
         {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.earthsOrigins.xPos, this.earthsOrigins.yPos)
+            this.hover.drawFrame(this.game.clockTick, ctx, this.planetsOrigins.xPos, this.planetsOrigins.yPos)
         }
         if (!this.isHeadingRight)
         {
@@ -141,15 +144,14 @@ class Earth
 
         this.x = (Math.cos(this.radians) * this.solarDistance) + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.y = (Math.sin(this.radians) * this.solarDistance) + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
+
+        //this.x *= this.G;
+        //this.y *= this.G;
         
-        if (this.isHeadingRight)
-        {
-            //this.x += this.game.clockTick * this.speed;
-        }
-        else if (!this.isHeadingRight)
-        {
-            //this.x -= this.game.clockTick * this.speed;
-        }
+
+        //this.x += this.game.clockTick * this.speed;
+
+
 
         var that = this;
 
@@ -163,8 +165,8 @@ class Earth
 
         });
 
-        this.earthsOrigins.xPos = this.x - (this.frameWidth * this.size)/2;
-        this.earthsOrigins.yPos = this.y - (this.frameHeight * this.size)/2;
+        this.planetsOrigins.xPos = this.x - (this.frameWidth * this.size)/2;
+        this.planetsOrigins.yPos = this.y - (this.frameHeight * this.size)/2;
             
     }
 

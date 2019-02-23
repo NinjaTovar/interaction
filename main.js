@@ -5,11 +5,14 @@ AM.queueDownload('images/galaxy.png');
 AM.queueDownload('images/galaxy.jpg');
 AM.queueDownload('images/galaxy2.jpg');
 
-// Queue downloading main character
+// Queue downloading planets
 AM.queueDownload('images/sun.png');
-
-// Queue downloading main character
 AM.queueDownload('images/earth.png');
+AM.queueDownload('images/mars.png');
+AM.queueDownload('images/moon.png');
+AM.queueDownload('images/jupiter.png');
+AM.queueDownload('images/deathstar.png');
+AM.queueDownload('images/saturn.png');
 
 
 AM.downloadAll(function ()

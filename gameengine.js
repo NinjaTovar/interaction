@@ -51,6 +51,79 @@ class GameEngine
         galaxies.push('images/galaxy.jpg');
         galaxies.push('images/galaxy2.jpg');
 
+
+
+        this.earthsOrigins = {
+            planet: 'images/earth.png',
+            frameWidth: 511,
+            frameHeight: 513,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .08,
+            solarDistance: 200
+        };
+        this.jupitersOrigins = {
+            planet: 'images/jupiter.png',
+            frameWidth: 800,
+            frameHeight: 800,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .15,
+            solarDistance: 200
+        };
+        this.moonssOrigins = {
+            planet: 'images/moon.png',
+            frameWidth: 850,
+            frameHeight: 688,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .02,
+            solarDistance: 200
+        };
+        this.deathstarsOrigins = {
+            planet: 'images/deathstar.png',
+            frameWidth: 1024,
+            frameHeight: 819,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .08,
+            solarDistance: 200
+        };
+        this.marsOrigins = {
+            planet: 'images/mars.png',
+            frameWidth: 2260,
+            frameHeight: 2260,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .01,
+            solarDistance: 200
+        };
+        this.saturnsOrigins = {
+            planet: 'images/saturn.png',
+            frameWidth: 900,
+            frameHeight: 434,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .25,
+            solarDistance: 200
+        };
+        var planets = [];
+        planets.push(this.earthsOrigins);
+        planets.push(this.jupitersOrigins);
+        planets.push(this.moonssOrigins);
+        planets.push(this.deathstarsOrigins);
+        planets.push(this.marsOrigins);
+        planets.push(this.saturnsOrigins);
+
+
+
+
         // Initialize starting background
         this.addEntity(new Background(this, galaxies));
 
@@ -78,10 +151,12 @@ class GameEngine
         };
         this.sunsOrigin.x = this.sunsOrigin.x - (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
-        var solarDistance = 200;
+
+        console.log(this.earthsOrigins.planet);
+        console.log(this.earthsOrigins.solarDistance);
 
         this.addEntity(new Sun(this, this.sunsOrigin));
-        this.addEntity(new Earth(this, this.sunsOrigin, .08, solarDistance));
+        this.addEntity(new Planet(this, this.sunsOrigin, .08, planets[0].solarDistance, planets[0]));
 
         // for anonymous functions
         var that = this;
@@ -89,7 +164,13 @@ class GameEngine
         var addPlanet = document.getElementById('godMode');
         addPlanet.onclick = function ()
         {
-            that.addEntity(new Earth(that, that.sunsOrigin, Randomizer.returnRandomFloat(.01, .1), Randomizer.returnRandomIntBetweenThese(50, 500)));
+            var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
+            that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
+                Randomizer.returnRandomIntBetweenThese(50,800), planets[index]));
+            that.ctx.beginPath();
+        };
+        addPlanet.onmouseup = function ()
+        {
             that.ctx.beginPath();
         };
 
@@ -108,8 +189,7 @@ class GameEngine
 
             that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
 
-
-            console.log(num);
+            //console.log(num);
         }
 
         // Set listeners
