@@ -65,44 +65,7 @@ class Earth
         this.radians = 0;
         this.solarDistance = solarDistance;
 
-        //// The number of calculations of orbital path done in one 16 millisecond frame.
-        //// The higher the number, the more precise are the calculations and the slower the simulation.
-        //var numberOfCalculationsPerFrame = 1000;
-
-        //// The length of the time increment, in seconds.
-        //var deltaT = 3600 * 24 / numberOfCalculationsPerFrame;
-
-        //// Calculates the position of the Earth
-        //this.constants = {
-        //    gravitationalConstant: 6.67408 * Math.pow(10, -11),
-        //    earthSunDistanceMeters: 1.496 * Math.pow(10, 11),
-        //    earthAngularVelocityMetersPerSecond: 1.990986 * Math.pow(10, -7),
-        //    massOfTheSunKg: 1.98855 * Math.pow(10, 30)
-        //}
-        //// Initial condition of the model
-        //this.initialConditions = {
-        //    distance: {
-        //        value: this.constants.earthSunDistanceMeters,
-        //        speed: 0.00
-        //    },
-        //    angle: {
-        //        value: Math.PI / 6,
-        //        speed: this.constants.earthAngularVelocityMetersPerSecond
-        //    }
-        //};
-        //// Current state of the system
-        //this.state = {
-        //    distance: {
-        //        value: 0,
-        //        speed: 0
-        //    },
-        //    angle: {
-        //        value: 0,
-        //        speed: 0
-        //    },
-        //    massOfTheSunKg: this.constants.massOfTheSunKg,
-        //    paused: false
-        //};
+        this.G = 6.6742e-11; // universal gravitational constant
             
     }
 
@@ -150,7 +113,6 @@ class Earth
         // If field "isHeadingRight" is false, play fly left animation
         if (this.isHeadingRight)
         {
-            console.log(this.x + ', ' + this.earthsOrigins.xPos);
             this.hover.drawFrame(this.game.clockTick, ctx, this.earthsOrigins.xPos, this.earthsOrigins.yPos)
         }
         if (!this.isHeadingRight)

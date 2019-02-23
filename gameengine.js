@@ -90,6 +90,7 @@ class GameEngine
         addPlanet.onclick = function ()
         {
             that.addEntity(new Earth(that, that.sunsOrigin, Randomizer.returnRandomFloat(.01, .1), Randomizer.returnRandomIntBetweenThese(50, 500)));
+            that.ctx.beginPath();
         };
 
         // Setup slider for solar mass
