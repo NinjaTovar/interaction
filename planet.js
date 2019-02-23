@@ -67,6 +67,10 @@ class Planet
         this.solarDistance = solarDistance;
 
         this.G = 6.6742e-11; // universal gravitational constant
+        this.earthSunDistance = 1.496 * Math.pow(10, 11);
+        this.angularVelocity = 1.990986 * Math.pow(10, -7);
+        this.scaleFactor = this.earthSunDistance / this.solarDistance;
+        this.deltaT = 3600 * 24 / 1000;
             
     }
 
@@ -129,8 +133,6 @@ class Planet
     /** Update handles updating the objects world state. */
     update()
     {
-
-
         if (this.degrees < 360)
         {
             this.degrees += 1;
@@ -145,11 +147,32 @@ class Planet
         this.x = (Math.cos(this.radians) * this.solarDistance) + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.y = (Math.sin(this.radians) * this.solarDistance) + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
 
-        //this.x *= this.G;
-        //this.y *= this.G;
-        
+        var vectorTowardsOrigin = {
+            x: this.x - this.sunsOrigin.x,
+            y: this.y - this.sunsOrigin.y
+        }
 
-        //this.x += this.game.clockTick * this.speed;
+        console.log('Position:  ' + this.x + ", " + this.y);
+        console.log('Vector: ' + vectorTowardsOrigin.x + ', ' + vectorTowardsOrigin.y);
+
+        this.x -= vectorTowardsOrigin.x * this.G;
+        this.y -= vectorTowardsOrigin.y * this.G;
+
+        /**
+         * steps
+         *      get two json objects: initial state and current state
+         *      make functions:
+         *          function calculateDistanceAcceleration(state)
+         *          function calculateDistanceAcceleration(state)
+         *          function newValue(currentValue, deltaT, derivative)
+         *          function resetStateToInitialConditions()
+         *          function scaledDistance()
+         *          function updatePosition()
+         *          function calculateNewPosition()
+         *          function updateFromUserInput(solarMassMultiplier)
+         *          
+         *     might be it
+         * */
 
 
 

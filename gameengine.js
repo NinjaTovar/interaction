@@ -61,7 +61,7 @@ class GameEngine
             yPos: 0,
             mass: 0,
             scale: .08,
-            solarDistance: 200
+            solarDistance: 150
         };
         this.jupitersOrigins = {
             planet: 'images/jupiter.png',
@@ -147,7 +147,9 @@ class GameEngine
             height: 558,
             orgScale: .2,
             scale: .2,
-            center: 0
+            center: 0,
+            orgMass: 1.98855 * Math.pow(10, 30),
+            mass: 1.98855 * Math.pow(10, 30)
         };
         this.sunsOrigin.x = this.sunsOrigin.x - (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
@@ -188,6 +190,7 @@ class GameEngine
             output.innerHTML = num;
 
             that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
+            that.sunsOrigin.mass = num * that.sunsOrigin.orgMass;
 
             //console.log(num);
         }
