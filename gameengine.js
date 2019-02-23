@@ -164,12 +164,31 @@ class GameEngine
     {
         let entitiesCount = this.entities.length;
 
+        var removeSolarbody = false;
+        var pos;
+
         for (let i = 0; i < entitiesCount; i++)
         {
             let entity = this.entities[i];
 
+            // check if this entity needs removed
+            if (entity.destroyed)
+            {
+                removeSolarbody = true;
+                pos = i;
+            }
             entity.update();
         }
+
+        // remove if found to be destroyed
+        if (removeSolarbody)
+        {
+            console.log(this.entities[pos]);
+            this.entities.splice(pos, 1);
+            console.log(this.entities);
+            removeSolarbody = false;
+        }
+
     }
 
     /** Keeps the world ticking. */

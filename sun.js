@@ -39,6 +39,18 @@ class Sun
         this.isHeadingRight = true;
         this.currentScale = this.sunsOrigin.scale;
 
+        // hit box
+        this.size = this.sunsOrigin.scale;
+        this.frameWidth = 547;
+        this.frameHeight = 558;
+        this.hitBox = {
+            xPos: this.x,
+            yPos: this.y,
+            width: this.frameWidth * this.sunsOrigin.scale,
+            height: this.frameHeight * this.sunsOrigin.scale
+        };
+        this.showOutline = false;
+        this.destroyed = false;
     }
 
     // Methods
@@ -52,6 +64,15 @@ class Sun
     {
         this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y);
 
+        if (this.showOutline)
+        {
+            // hit box
+            //this.ctx.beginPath();
+            this.ctx.strokeStyle = 'white';
+            this.ctx.rect(this.x, this.y, this.hitBox.width, this.hitBox.height);
+            this.ctx.stroke();
+        }
+
     }
 
 
@@ -59,6 +80,8 @@ class Sun
     /** Update handles updating the objects world state. */
     update()
     {
+
+
         if (this.currentScale !== this.sunsOrigin.scale)
         {
             this.hover = new Animation
@@ -81,6 +104,20 @@ class Sun
         {
             //this.x -= this.game.clockTick * this.speed;
         }
+
+        var that = this;
+        
+        this.game.entities.forEach(function (item, index, array)
+        {
+
+            if (item.size == .2)
+            {
+                that.pos = index;
+                //that.destroyed = true;
+            }
+
+        });
+
     }
 
 }

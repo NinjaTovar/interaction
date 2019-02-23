@@ -40,8 +40,25 @@ class Earth
         this.ctx = game.ctx;
         this.isHeadingRight = true;
 
+
+
         // hit box
         this.size = size;
+        this.frameWidth = 511;
+        this.frameHeight = 513;
+        this.hitBox = {
+            xPos: this.x,
+            yPos: this.y,
+            width: this.frameWidth * this.size,
+            height: this.frameHeight * this.size
+        };
+        this.showOutline = false;
+        this.destroyed = false;
+
+        this.earthsOrigins = {
+            xPos: this.x + this.frameWidth * this.size,
+            yPos: this.y + this.frameHeight * this.size
+        };
 
         // physics
         this.degrees = 0;
@@ -98,20 +115,32 @@ class Earth
      */
     draw(ctx)
     {
+        if (this.showOutline)
+        {
+            this.ctx.save();
+            // hit box
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = 'white';
+            this.ctx.rect(this.x, this.y, this.frameWidth * this.size, this.frameHeight * this.size);
+            this.ctx.stroke();
+            this.ctx.restore();
+        }
+        else 
+        {
+            this.ctx.save();
+            //this.ctx.beginPath();
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + .2 + ")";
+            this.ctx.setLineDash([2,20,30]);
+            //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
+            this.ctx.moveTo(this.prevX, this.prevY);
+            this.ctx.lineTo(this.x, this.y);
+            this.ctx.stroke();
+            this.ctx.restore();
+        }
 
-        //this.ctx.beginPath();
-        this.ctx.lineWidth = 5;
-        this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + .2 + ")";
-        //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
-        this.ctx.moveTo(this.prevX, this.prevY);
-        this.ctx.lineTo(this.x, this.y);
-        this.ctx.stroke();
 
-        // hit box
-        this.ctx.beginPath();
-        this.ctx.strokeStyle = 'white';
-        this.ctx.rect(this.x, this.y, this.frameWidth * this.size, this.frameHeight * this.size);
-        this.ctx.stroke();
+
 
 
         this.prevX = this.x;
@@ -121,7 +150,8 @@ class Earth
         // If field "isHeadingRight" is false, play fly left animation
         if (this.isHeadingRight)
         {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y)
+            console.log(this.x + ', ' + this.earthsOrigins.xPos);
+            this.hover.drawFrame(this.game.clockTick, ctx, this.earthsOrigins.xPos, this.earthsOrigins.yPos)
         }
         if (!this.isHeadingRight)
         {
@@ -134,6 +164,8 @@ class Earth
     /** Update handles updating the objects world state. */
     update()
     {
+
+
         if (this.degrees < 360)
         {
             this.degrees += 1;
@@ -156,6 +188,22 @@ class Earth
         {
             //this.x -= this.game.clockTick * this.speed;
         }
+
+        var that = this;
+
+        this.game.entities.forEach(function (item, index, array)
+        {
+            if (item.size == .2)
+            {
+                that.pos = index;
+                //that.destroyed = true;
+            }
+
+        });
+
+        this.earthsOrigins.xPos = this.x - (this.frameWidth * this.size)/2;
+        this.earthsOrigins.yPos = this.y - (this.frameHeight * this.size)/2;
+            
     }
 
 }
