@@ -39,15 +39,6 @@ class Sun
         this.isHeadingRight = true;
         this.currentScale = this.sunsOrigin.scale;
 
-
-
-        // this will be used for rewind
-        this.myPath = [];
-        this.myPath.push(0);
-        this.shouldRewind = false;
-        this.resetPath = false;
-
-
     }
 
     // Methods
@@ -59,15 +50,8 @@ class Sun
      */
     draw(ctx)
     {
-        // If field "isHeadingRight" is false, play fly left animation
-        if (this.isHeadingRight)
-        {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y)
-        }
-        if (!this.isHeadingRight)
-        {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y)
-        }
+        this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+
     }
 
 

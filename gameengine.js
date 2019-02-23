@@ -66,44 +66,49 @@ class GameEngine
 
         };
 
+        // create suns values
         this.sunsOrigin = {
             x: screen.width / 2,
             y: this.surfaceHeight / 2,
             width: 547,
             height: 558,
             orgScale: .2,
-            scale: .2
+            scale: .2,
+            center: 0
         };
+        this.sunsOrigin.x = this.sunsOrigin.x - (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
+        this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
+        var solarDistance = 200;
 
         this.addEntity(new Sun(this, this.sunsOrigin));
-        this.addEntity(new Earth(this, this.sunsOrigin, .08));
+        this.addEntity(new Earth(this, this.sunsOrigin, .08, solarDistance));
+
+        // for anonymous functions
+        var that = this;
+
+        var addPlanet = document.getElementById('godMode');
+        addPlanet.onclick = function ()
+        {
+            that.addEntity(new Earth(that, that.sunsOrigin, Randomizer.returnRandomFloat(.01, .1), Randomizer.returnRandomIntBetweenThese(50, 500)));
+        };
 
         // Setup slider for solar mass
         var slider = document.getElementById('size');
         var output = document.getElementById('mass');
-        output.innerHTML = slider.value;
+        output.innerHTML = slider.value / 100;
 
-        var that = this;
+
         slider.oninput = function ()
         {
-            var num = this.value;
+            var num = this.value / 100;
 
-            if (num >= 0)
-            {
-                if (num == 0)
-                    num++;
-                output.innerHTML = num;
+            console.log('NEQ');
+            output.innerHTML = num;
 
-                that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
+            that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
 
-            }
-            else
-            {
-                num = -1 / num;
-                output.innerHTML = num;
 
-                that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
-            }
+            console.log(num);
         }
 
         // Set listeners

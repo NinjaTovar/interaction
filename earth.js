@@ -16,7 +16,7 @@ class Earth
      * @param {any} startY Starting x position of the fly being constructed.
      * @param {any} size Size of scale for character.
      */
-    constructor(game, sunsOrigin, size)
+    constructor(game, sunsOrigin, size, solarDistance)
     {
         this.hover = new Animation
             (
@@ -31,17 +31,22 @@ class Earth
             );
 
         this.sunsOrigin = sunsOrigin;
-        this.x = sunsOrigin.x;
-        this.y = sunsOrigin.y;
+        this.x;
+        this.y;
+        this.prevX = this.x;
+        this.prevY = this.y;
         this.speed = 20;
         this.game = game;
         this.ctx = game.ctx;
         this.isHeadingRight = true;
 
+        // hit box
+        this.size = size;
+
         // physics
         this.degrees = 0;
         this.radians = 0;
-        this.solarDistance = 100;
+        this.solarDistance = solarDistance;
 
         //// The number of calculations of orbital path done in one 16 millisecond frame.
         //// The higher the number, the more precise are the calculations and the slower the simulation.
@@ -93,6 +98,24 @@ class Earth
      */
     draw(ctx)
     {
+
+        //this.ctx.beginPath();
+        this.ctx.lineWidth = 5;
+        this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + .2 + ")";
+        //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
+        this.ctx.moveTo(this.prevX, this.prevY);
+        this.ctx.lineTo(this.x, this.y);
+        this.ctx.stroke();
+
+        // hit box
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = 'white';
+        this.ctx.rect(this.x, this.y, this.frameWidth * this.size, this.frameHeight * this.size);
+        this.ctx.stroke();
+
+
+        this.prevX = this.x;
+        this.prevY = this.y;
 
         //console.log(this.x);
         // If field "isHeadingRight" is false, play fly left animation
