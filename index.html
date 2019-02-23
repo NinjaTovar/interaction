@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Interaction</title>
+    <link rel="stylesheet" href="./main.css" />
+    <script type="text/javascript" src="./gameengine.js"></script>
+    <script type="text/javascript" src="./assetmanager.js"></script>
+    <script type="text/javascript" src="./entity.js"></script>
+    <script type="text/javascript" src="./timer.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./animation.js"></script>
+    <script type="text/javascript" src="./randomizer.js"></script>
+    <script type="text/javascript" src="./background.js"></script>
+    <script type="text/javascript" src="./earth.js"></script>
+    <script type="text/javascript" src="./sun.js"></script>
+</head>
+<body>
+    <!--
+    <iframe
+            id="levelOneMusic"
+            name="levelOneMusic"
+            src="./audio/levels/levelOne.mp3"
+            allow="autoplay"
+            style="display:none">
+    </iframe>
+     -->
+    <!-- Load the game world layers -->
+    <canvas id="projectionsLayerBottom" tabindex="0" width="5000" height="700"
+            style="position:absolute;left:0;top:0;"></canvas>
+    <canvas id="projectionsLayerMiddle" tabindex="0" width="5000" height="700"
+            style="position:absolute;left:0;top:0;"></canvas>
+    <canvas id="gameWorld" tabindex="1" width="5000" height="700"
+            style="position:absolute;left:0;top:0;"></canvas>
+    <!-- This is breaking the game world as it loses focus to the overlay
+            <canvas id="projectionsLayerOverlayAll" tabindex="0" width="5000" height="586"
+            style="position:absolute;left:0;top:0;"></canvas>
+    -->
+    <!-- Formatting for text instructions on-screen. Audio tags are below this.-->
+    <p>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row">
+
+            <!-- Change Music -->
+            <center>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="slidercontainer">
+                    <input type="range" min="-50" max="50" value="1" class="slider" id="size"
+    <p>Solar Mass: <span id="mass"></span></p>
+    </div>
+    </center>
+    </div>
+    <div class="row">
+        <div class="column"> <br /></div>
+        <!-- Playing Universe Builder -->
+        <div class="column">
+            <center>
+                <h4><Font color='C10D3E' />Playing God<Font color='White' /></h4>
+                <button class="buttonGodMode" id="godMode" type="button">Add Solar Body (Not Active)</button>
+
+            </center>
+        </div>
+
+        <div class="column">
+            <center>
+                <!-- Background Manager-->
+                <h4><Font color='770DC1' />Backdrop Image<Font color='White' /></h4>
+                <button class="galaxy" id="background" type="button">Switch Galaxy</button>
+            </center>
+        </div>
+        <div class="column"> </div>
+    </div>
+        </p>
+
+        <!-- Handle audio here
+    <audio id="adventureTimeTrack"
+           controls
+           loop
+           hidden
+           preload="auto"
+           src="./audio/levels/AdventureTimeTrack.mp3" />
+     -->
+
+</body>
+</html>
