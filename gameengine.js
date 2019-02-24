@@ -43,6 +43,8 @@ class GameEngine
         // Setup HTML Buttons
         var godModeButton = document.getElementById('godMode');
         var background = document.getElementById('background');
+        var music = document.getElementById('orbit');
+        music.volume = .4;
 
         // 'images/galaxy.png'
 
@@ -50,6 +52,10 @@ class GameEngine
         galaxies.push('images/galaxy.png');
         galaxies.push('images/galaxy.jpg');
         galaxies.push('images/galaxy2.jpg');
+        galaxies.push('images/galaxy3.jpg');
+        galaxies.push('images/galaxy4.jpg');
+        galaxies.push('images/galaxy5.jpg');
+        galaxies.push('images/galaxy6.jpg');
 
 
 
@@ -163,7 +169,7 @@ class GameEngine
         // On change background click, shift array for images
         background.onclick = function ()
         {
-            
+            music.play();
             var temp = galaxies.shift();
             if (temp !== undefined)
             {
@@ -197,6 +203,8 @@ class GameEngine
         var addPlanet = document.getElementById('godMode');
         addPlanet.onclick = function ()
         {
+            music.play();
+
             var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
             that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
                 Randomizer.returnRandomIntBetweenThese(200,800), planets[index]));

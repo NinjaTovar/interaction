@@ -4,6 +4,10 @@ var AM = new AssetManager();
 AM.queueDownload('images/galaxy.png');
 AM.queueDownload('images/galaxy.jpg');
 AM.queueDownload('images/galaxy2.jpg');
+AM.queueDownload('images/galaxy3.jpg');
+AM.queueDownload('images/galaxy4.jpg');
+AM.queueDownload('images/galaxy5.jpg');
+AM.queueDownload('images/galaxy6.jpg');
 
 // Queue downloading planets
 AM.queueDownload('images/sun.png');
