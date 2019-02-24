@@ -81,7 +81,7 @@ class Planet
         };
 
         // The length of one AU (Earth-Sun distance) in pixels.
-        this.pixelsInOneEarthSunDistancePerPixel = 150;
+        this.pixelsInOneEarthSunDistancePerPixel = this.solarDistance;
 
         // A factor by which we scale the distance between the Sun and the Earth
         // in order to show it on screen
