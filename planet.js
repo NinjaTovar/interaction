@@ -86,9 +86,9 @@ class Planet
 
         this.constants = {
             gravity: 6.67408 * Math.pow(10, -11), // Add some flavor to the orbits by changing the distance from the sun
-            astronomicalUnit: 1.496 * Math.pow(10, Randomizer.returnRandomFloat(10.9, 11.15)),
+            astronomicalUnit: 1.496 * Math.pow(10, Randomizer.returnRandomFloat(10.85, 11)),
             solarBodyVelocity: 1.990986 * Math.pow(10, -7),
-            sunMass: 1.98855 * Math.pow(10, 30.1)
+            sunMass: 1.98855 * Math.pow(10, 46)
         };
         //if (this.game.firstCosmos === false)
         //{
@@ -102,7 +102,7 @@ class Planet
         this.scaleFactor = this.constants.astronomicalUnit / this.solarDistanceInPixels;
 
         // number of calculations to do per frame animated
-        this.calculationsPerTick = 1;
+        this.calculationsPerTick = 10000;
 
         // time delta to be used for differentials
         this.timeDelta = 3600 * 24 / this.calculationsPerTick;
