@@ -16,7 +16,7 @@ class Planet
      * @param {any} startY Starting x position of the fly being constructed.
      * @param {any} size Size of scale for character.
      */
-    constructor(game, sunsOrigin, size, solarDistance, planetsOrigin)
+    constructor(game, sunsOrigin, size, solarDistance, planetsOrigin, showOrbit)
     {
         this.hover = new Animation
             (
@@ -38,7 +38,7 @@ class Planet
         this.prevY = this.y;
         this.game = game;
         this.ctx = game.ctx;
-        this.isHeadingRight = true;
+        this.showOrbit = showOrbit;
 
         this.mouseIsHeld = false;
 
@@ -230,13 +230,13 @@ class Planet
             this.ctx.stroke();
             this.ctx.restore();
         }
-        else 
+        else if (this.showOrbit)
         {
             //this.ctx.restore();
             //this.ctx.beginPath();
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + 1 + ")";
-            this.ctx.setLineDash([.5, 20]);
+            this.ctx.setLineDash([.5, 20000]);
             //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
             this.ctx.moveTo(this.prevX, this.prevY);
             this.ctx.lineTo(this.x, this.y);
@@ -268,6 +268,13 @@ class Planet
             this.mouseIsHeld = this.game.mouseIsHeld;
             //console.log(this.mouseIsHeld);
         }
+        if (this.game.showOrbit != undefined)
+        {
+            this.showOrbit = this.game.showOrbit;
+            //console.log(this.mouseIsHeld);
+        }
+
+
         //if (this.degrees < 360)
         //{
         //    this.degrees += 1;

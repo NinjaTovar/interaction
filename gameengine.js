@@ -175,6 +175,7 @@ class GameEngine
         background.onclick = function ()
         {
             music.play();
+            that.ctx.beginPath();
             this.firstCosmos = false;
             var temp = galaxies.shift();
             if (temp !== undefined)
@@ -206,7 +207,7 @@ class GameEngine
 
         this.addEntity(new Sun(this, this.sunsOrigin));
         // add earth initially
-        this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0]));
+        this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0]), this.showOrbit);
 
         
 
@@ -215,14 +216,18 @@ class GameEngine
         {
             music.play();
 
+            //that.ctx.beginPath();
             var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
             that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
-                Randomizer.returnRandomIntBetweenThese(100,800), planets[index]));
-            that.ctx.beginPath();
+                Randomizer.returnRandomIntBetweenThese(100, 800), planets[index]), that.showOrbit);
         };
-        addPlanet.onmouseup = function ()
+
+        var showCircumgyration = document.getElementById('circumgyration');
+        showCircumgyration.onclick = function ()
         {
+            music.play();
             that.ctx.beginPath();
+            that.showOrbit = !that.showOrbit;
         };
 
         // Setup slider for solar mass
@@ -314,6 +319,10 @@ class GameEngine
                 removeSolarbody = true;
                 pos = i;
 
+            }
+            if (this.showOrbit)
+            {
+                entity.showOrbit = true;
             }
             entity.update();
         }

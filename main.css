@@ -4,7 +4,7 @@ html {
 
 .column {
     float: left;
-    width: 25%;
+    width: 33%;
 }
 
 /* Clear floats after the columns */
@@ -64,6 +64,20 @@ html {
 
 
 .galaxy {
+    background-color: #000000; /* Black */
+    border: inset;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Consolas;
+    box-shadow: inset;
+}
+
+.orbitals {
     background-color: #000000; /* Black */
     border: inset;
     color: white;
