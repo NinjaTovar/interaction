@@ -88,7 +88,7 @@ class Planet
             gravity: 6.67408 * Math.pow(10, -11), // Add some flavor to the orbits by changing the distance from the sun
             astronomicalUnit: 1.496 * Math.pow(10, Randomizer.returnRandomFloat(10.85, 11)),
             solarBodyVelocity: 1.990986 * Math.pow(10, -7),
-            sunMass: 1.98855 * Math.pow(10, 46)
+            sunMass: 1.98855 * Math.pow(10, Randomizer.returnRandomFloat(29.5, 30.6))
         };
         //if (this.game.firstCosmos === false)
         //{
