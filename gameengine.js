@@ -226,6 +226,7 @@ class GameEngine
 
         slider.oninput = function ()
         {
+            music.play();
             var num = this.value / 100;
 
             output.innerHTML = num;
