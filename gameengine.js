@@ -149,13 +149,10 @@ class GameEngine
             scale: .2,
             center: 0,
             orgMass: 1.98855 * Math.pow(10, 30),
-            mass: 1.98855 * Math.pow(10, 30)
+            mass: 1
         };
         this.sunsOrigin.x = this.sunsOrigin.x - (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
-
-        console.log(this.earthsOrigins.planet);
-        console.log(this.earthsOrigins.solarDistance);
 
         this.addEntity(new Sun(this, this.sunsOrigin));
         this.addEntity(new Planet(this, this.sunsOrigin, .08, planets[0].solarDistance, planets[0]));
@@ -186,13 +183,10 @@ class GameEngine
         {
             var num = this.value / 100;
 
-            console.log('NEQ');
             output.innerHTML = num;
 
             that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
-            that.sunsOrigin.mass = num * that.sunsOrigin.orgMass;
-
-            //console.log(num);
+            that.sunsOrigin.mass = num;
         }
 
         // Set listeners
