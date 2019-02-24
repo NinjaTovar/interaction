@@ -37,7 +37,8 @@ class GameEngine
         this.surfaceHeight = this.ctx.canvas.height;
         this.timer = new Timer();
 
-
+        this.middleProjectionCtx.fillStyle = "#FB00FE";
+        this.middleProjectionCtx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
 
 
         // Setup HTML Buttons
@@ -146,7 +147,7 @@ class GameEngine
             xPos: 0,
             yPos: 0,
             mass: 0,
-            scale: .15,
+            scale: .25,
             solarDistance: 200
         };
         var planets = [];
@@ -313,6 +314,11 @@ class GameEngine
             this.entities.splice(pos, 1);
             console.log(this.entities);
             removeSolarbody = false;
+            this.ctx.globalAlpha = .5;  
+        }
+        if (this.ctx.globalAlpha < .98)
+        {
+            this.ctx.globalAlpha += .01;
         }
 
     }
