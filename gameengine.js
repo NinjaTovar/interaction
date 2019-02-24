@@ -68,7 +68,7 @@ class GameEngine
             yPos: 0,
             mass: 0,
             scale: .02,
-            solarDistance: 150
+            solarDistance: 300
         };
         this.jupitersOrigins = {
             planet: 'images/jupiter.png',
@@ -185,8 +185,8 @@ class GameEngine
             y: this.surfaceHeight / 2,
             width: 547,
             height: 558,
-            orgScale: .2,
-            scale: .4,
+            orgScale: .3,
+            scale: .3,
             center: 0,
             orgMass: 1.98855 * Math.pow(10, 30),
             mass: 1,
@@ -210,7 +210,7 @@ class GameEngine
 
             var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
             that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
-                Randomizer.returnRandomIntBetweenThese(200,800), planets[index]));
+                Randomizer.returnRandomIntBetweenThese(100,800), planets[index]));
             that.ctx.beginPath();
         };
         addPlanet.onmouseup = function ()
