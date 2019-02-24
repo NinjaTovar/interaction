@@ -113,6 +113,36 @@ class GameEngine
             scale: .15,
             solarDistance: 200
         };
+        this.plutosOrigins = {
+            planet: 'images/pluto.png',
+            frameWidth: 512,
+            frameHeight: 512,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .15,
+            solarDistance: 200
+        };
+        this.vulcansOrigins = {
+            planet: 'images/vulcan.png',
+            frameWidth: 300,
+            frameHeight: 300,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .15,
+            solarDistance: 200
+        };
+        this.blackholesOrigins = {
+            planet: 'images/blackhole.png',
+            frameWidth: 256,
+            frameHeight: 256,
+            xPos: 0,
+            yPos: 0,
+            mass: 0,
+            scale: .15,
+            solarDistance: 200
+        };
         var planets = [];
         planets.push(this.earthsOrigins);
         planets.push(this.jupitersOrigins);
@@ -120,6 +150,9 @@ class GameEngine
         planets.push(this.deathstarsOrigins);
         planets.push(this.marsOrigins);
         planets.push(this.saturnsOrigins);
+        planets.push(this.plutosOrigins);
+        planets.push(this.vulcansOrigins);
+        planets.push(this.blackholesOrigins);
 
 
 

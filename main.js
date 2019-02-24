@@ -13,6 +13,9 @@ AM.queueDownload('images/moon.png');
 AM.queueDownload('images/jupiter.png');
 AM.queueDownload('images/deathstar.png');
 AM.queueDownload('images/saturn.png');
+AM.queueDownload('images/pluto.png');
+AM.queueDownload('images/blackhole.png');
+AM.queueDownload('images/vulcan.png');
 
 
 AM.downloadAll(function ()
