@@ -41,6 +41,8 @@ class Planet
         this.ctx = game.ctx;
         this.isHeadingRight = true;
 
+        this.mouseIsHeld = false;
+
         this.radius = planetsOrigin.frameWidth / 2;
         this.circle = {
             radius: this.radius,
@@ -256,6 +258,12 @@ class Planet
     /** Update handles updating the objects world state. */
     update()
     {
+
+        if (this.game.mouseIsHeld != undefined)
+        {
+            this.mouseIsHeld = this.game.mouseIsHeld;
+            //console.log(this.mouseIsHeld);
+        }
         //if (this.degrees < 360)
         //{
         //    this.degrees += 1;

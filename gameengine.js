@@ -234,9 +234,12 @@ class GameEngine
             that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
             that.sunsOrigin.radius = num * that.sunsOrigin.orgRadius;
             that.sunsOrigin.mass = num;
-            console.log(that.sunsOrigin.radius);
-            
-        }
+
+            that.mouseIsHeld = true;
+
+        };
+
+        
 
         // Set listeners
         this.initializeEventListeners();
@@ -351,7 +354,26 @@ class GameEngine
                 switch (e.button)
                 {
                     case 0:
-                        that.levelStarted = true;
+                        that.mouseIsHeld = true;
+                        console.log('down');
+                        break;
+                    default:
+                        break;
+                }
+            },
+            false
+        );
+
+        // Event Listeners
+        this.ctx.canvas.addEventListener(
+            'mouseup',
+            e =>
+            {
+                switch (e.button)
+                {
+                    case 0:
+                        that.mouseIsHeld = false;
+                        console.log('up');
                         break;
                     default:
                         break;
