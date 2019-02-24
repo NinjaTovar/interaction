@@ -41,6 +41,12 @@ class Planet
         this.ctx = game.ctx;
         this.isHeadingRight = true;
 
+        this.radius = planetsOrigin.frameWidth / 2;
+        this.circle = {
+            radius: this.radius,
+            x: this.x,
+            y: this.y
+        };
 
         // hit box
         this.size = size;
@@ -274,7 +280,7 @@ class Planet
 
         //this.x -= vectorTowardsOrigin.x * this.G;
         //this.y -= vectorTowardsOrigin.y * this.G;
-
+        //console.log(this.sunsOrigin.radius);
         this.updatePosition();
 
         //console.log(this.currentConditions.angle.speed);
@@ -283,20 +289,31 @@ class Planet
 
         this.x = Math.cos(this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.y = Math.sin(-this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
-        //console.log(this.x);
-        
+
+        // hit box work
+        this.circle.x = this.x;
+        this.circle.y = this.y;
+
+        var dx = this.circle.x - (this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale);
+        var dy = this.circle.y - (this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        //console.log(distance > this.sunsOrigin.radius * this.sunsOrigin.scale);
 
         var that = this;
 
-        this.game.entities.forEach(function (item, index, array)
+        if (distance < this.sunsOrigin.radius * this.sunsOrigin.scale)
         {
-            if (item.size == .2)
-            {
-                that.pos = index;
-                //that.destroyed = true;
-            }
+            this.destroyed = true;
+        }
+        //this.game.entities.forEach(function (item, index, array)
+        //{
+        //    if (item.size == .2)
+        //    {
+        //        that.pos = index;
+        //        that.destroyed = true;
+        //    }
 
-        });
+        //});
 
         this.planetsOrigins.xPos = this.x - (this.frameWidth * this.size)/2;
         this.planetsOrigins.yPos = this.y - (this.frameHeight * this.size)/2;

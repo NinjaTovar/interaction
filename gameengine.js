@@ -188,7 +188,9 @@ class GameEngine
             scale: .4,
             center: 0,
             orgMass: 1.98855 * Math.pow(10, 30),
-            mass: 1
+            mass: 1,
+            orgRadius: 275,
+            radius: 275
         };
         this.sunsOrigin.x = this.sunsOrigin.x - (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
         this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
@@ -228,7 +230,10 @@ class GameEngine
             output.innerHTML = num;
 
             that.sunsOrigin.scale = num * that.sunsOrigin.orgScale;
+            that.sunsOrigin.radius = num * that.sunsOrigin.orgRadius;
             that.sunsOrigin.mass = num;
+            console.log(that.sunsOrigin.radius);
+            
         }
 
         // Set listeners
@@ -296,6 +301,7 @@ class GameEngine
             {
                 removeSolarbody = true;
                 pos = i;
+
             }
             entity.update();
         }
