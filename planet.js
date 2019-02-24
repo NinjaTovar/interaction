@@ -36,7 +36,6 @@ class Planet
         this.y;
         this.prevX = this.x;
         this.prevY = this.y;
-        this.speed = 2000;
         this.game = game;
         this.ctx = game.ctx;
         this.isHeadingRight = true;
@@ -84,12 +83,17 @@ class Planet
         // for gravity. This website was a lifesaver!
         // *******************************************************************************
         // Physics constants
+
         this.constants = {
             gravity: 6.67408 * Math.pow(10, -11), // Add some flavor to the orbits by changing the distance from the sun
-            astronomicalUnit: 1.496 * Math.pow(10, Randomizer.returnRandomFloat(10.878, 11)),
+            astronomicalUnit: 1.496 * Math.pow(10, Randomizer.returnRandomFloat(10.9, 11.15)),
             solarBodyVelocity: 1.990986 * Math.pow(10, -7),
-            sunMass: 1.98855 * Math.pow(10, 30)
+            sunMass: 1.98855 * Math.pow(10, 30.1)
         };
+        //if (this.game.firstCosmos === false)
+        //{
+        //    this.constants.astronomicalUnit = Math.pow(10, Randomizer.returnRandomFloat(10.87, 11.21));
+        //}
 
         // The length of one AU (Earth-Sun distance) in pixels.
         this.solarDistanceInPixels = this.solarDistance;
@@ -98,7 +102,7 @@ class Planet
         this.scaleFactor = this.constants.astronomicalUnit / this.solarDistanceInPixels;
 
         // number of calculations to do per frame animated
-        this.calculationsPerTick = 1000;
+        this.calculationsPerTick = 1;
 
         // time delta to be used for differentials
         this.timeDelta = 3600 * 24 / this.calculationsPerTick;

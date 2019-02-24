@@ -41,6 +41,10 @@ class GameEngine
         this.middleProjectionCtx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
 
 
+        // for anonymous functions
+        var that = this;
+        this.firstCosmos = true;
+
         // Setup HTML Buttons
         var godModeButton = document.getElementById('godMode');
         var background = document.getElementById('background');
@@ -171,12 +175,16 @@ class GameEngine
         background.onclick = function ()
         {
             music.play();
+            this.firstCosmos = false;
             var temp = galaxies.shift();
             if (temp !== undefined)
             {
                 galaxies.push(temp);
             }
-
+            that.middleProjectionCtx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+            that.middleProjectionCtx.fillStyle = "#00B1FE";
+            that.middleProjectionCtx.fillRect(0, 0, that.surfaceWidth, that.surfaceHeight);
+            that.ctx.globalAlpha = .05;
         };
 
         // create suns values
@@ -200,8 +208,7 @@ class GameEngine
         // add earth initially
         this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0]));
 
-        // for anonymous functions
-        var that = this;
+        
 
         var addPlanet = document.getElementById('godMode');
         addPlanet.onclick = function ()
@@ -323,6 +330,11 @@ class GameEngine
         if (this.ctx.globalAlpha < .98)
         {
             this.ctx.globalAlpha += .01;
+        }
+        if (this.ctx.globalAlpha > .98)
+        {
+            this.middleProjectionCtx.fillStyle = "#FB00FE";
+            this.middleProjectionCtx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
         }
 
     }

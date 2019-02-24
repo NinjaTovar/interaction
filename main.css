@@ -39,7 +39,6 @@ html {
     /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
-        appearance: none;
         width: 25px;
         height: 25px;
         border-radius: 50%;
@@ -47,13 +46,7 @@ html {
         cursor: pointer;
     }
 
-    .slider::-moz-range-thumb {
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        background: #ff6a00;
-        cursor: pointer;
-    }
+
 
 .buttonGodMode {
     background-color: #000000; /* Black */
