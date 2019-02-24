@@ -50,6 +50,7 @@ html {
 
 
 .buttonGodMode {
+    border-radius: 50px;
     background-color: #000000; /* Black */
     border: inset;
     color: white;
@@ -63,8 +64,12 @@ html {
     box-shadow: inset;
 }
 
+button:focus {
+    outline: 0;
+}
 
 .galaxy {
+    border-radius: 50px;
     background-color: #000000; /* Black */
     border: inset;
     color: white;
@@ -79,6 +84,7 @@ html {
 }
 
 .orbitals {
+    border-radius: 50px;
     background-color: #000000; /* Black */
     border: inset;
     color: white;
