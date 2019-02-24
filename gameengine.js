@@ -55,12 +55,12 @@ class GameEngine
 
         this.earthsOrigins = {
             planet: 'images/earth.png',
-            frameWidth: 511,
-            frameHeight: 513,
+            frameWidth: 1600,
+            frameHeight: 1600,
             xPos: 0,
             yPos: 0,
             mass: 0,
-            scale: .08,
+            scale: .02,
             solarDistance: 150
         };
         this.jupitersOrigins = {
@@ -70,7 +70,7 @@ class GameEngine
             xPos: 0,
             yPos: 0,
             mass: 0,
-            scale: .15,
+            scale: .13,
             solarDistance: 200
         };
         this.moonssOrigins = {
@@ -110,7 +110,7 @@ class GameEngine
             xPos: 0,
             yPos: 0,
             mass: 0,
-            scale: .25,
+            scale: .15,
             solarDistance: 200
         };
         var planets = [];
@@ -146,7 +146,7 @@ class GameEngine
             width: 547,
             height: 558,
             orgScale: .2,
-            scale: .2,
+            scale: .4,
             center: 0,
             orgMass: 1.98855 * Math.pow(10, 30),
             mass: 1
@@ -155,7 +155,8 @@ class GameEngine
         this.sunsOrigin.y = this.sunsOrigin.y - (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
 
         this.addEntity(new Sun(this, this.sunsOrigin));
-        this.addEntity(new Planet(this, this.sunsOrigin, .08, planets[0].solarDistance, planets[0]));
+        // add earth initially
+        this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0]));
 
         // for anonymous functions
         var that = this;
@@ -165,7 +166,7 @@ class GameEngine
         {
             var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
             that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
-                Randomizer.returnRandomIntBetweenThese(50,800), planets[index]));
+                Randomizer.returnRandomIntBetweenThese(200,800), planets[index]));
             that.ctx.beginPath();
         };
         addPlanet.onmouseup = function ()

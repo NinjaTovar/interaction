@@ -69,45 +69,46 @@ class Planet
         //this.earthSunDistance = 1.496 * Math.pow(10, 11);
         //this.angularVelocity = 1.990986 * Math.pow(10, -7);
         //this.scaleFactor = this.earthSunDistance / this.solarDistance;
-        //this.deltaT = 3600 * 24 / 1000;
+        //this.timeDelta = 3600 * 24 / 1000;
 
+        // Credit for much of this math goes to open source website: https://evgenii.com
+        // This was incredibly difficult to do and I spent many hours working on vectors
+        // for gravity. This website was a lifesaver!
         // *******************************************************************************
         // Physics constants
         this.constants = {
-            gravitationalConstant: 6.67408 * Math.pow(10, -11),
-            earthSunDistanceMeters: 1.496 * Math.pow(10, 11),
-            earthAngularVelocityMetersPerSecond: 1.990986 * Math.pow(10, -7),
-            massOfTheSunKg: 1.98855 * Math.pow(10, 30)
+            gravity: 6.67408 * Math.pow(10, -11),
+            astronomicalUnit: 1.496 * Math.pow(10, 11),
+            solarBodyVelocity: 1.990986 * Math.pow(10, -7),
+            sunMass: 1.98855 * Math.pow(10, 30)
         };
 
         // The length of one AU (Earth-Sun distance) in pixels.
-        this.pixelsInOneEarthSunDistancePerPixel = this.solarDistance;
+        this.solarDistanceInPixels = this.solarDistance;
 
-        // A factor by which we scale the distance between the Sun and the Earth
-        // in order to show it on screen
-        this.scaleFactor = this.constants.earthSunDistanceMeters / this.pixelsInOneEarthSunDistancePerPixel;
+        // Solar distance scaled to pixels on-screen
+        this.scaleFactor = this.constants.astronomicalUnit / this.solarDistanceInPixels;
 
-        // The number of calculations of orbital path done in one 16 millisecond frame.
-        // The higher the number, the more precise are the calculations and the slower the simulation.
-        this.numberOfCalculationsPerFrame = 1000;
+        // number of calculations to do per frame animated
+        this.calculationsPerTick = 1000;
 
-        // The length of the time increment, in seconds.
-        this.deltaT = 3600 * 24 / this.numberOfCalculationsPerFrame;
+        // time delta to be used for differentials
+        this.timeDelta = 3600 * 24 / this.calculationsPerTick;
 
-        // Initial condition of the model
+        // Initial conditions
         this.initialConditions = {
             distance: {
-                value: this.constants.earthSunDistanceMeters,
+                value: this.constants.astronomicalUnit,
                 speed: 0.00
             },
             angle: {
                 value: Math.PI / 6,
-                speed: this.constants.earthAngularVelocityMetersPerSecond
+                speed: this.constants.solarBodyVelocity
             }
         };
 
-        // Current state of the system
-        this.state = {
+        // Current state of the solar body in distance and angles
+        this.currentConditions = {
             distance: {
                 value: 0,
                 speed: 0
@@ -116,55 +117,50 @@ class Planet
                 value: 0,
                 speed: 0
             },
-            massOfTheSunKg: this.constants.massOfTheSunKg,
-            paused: false
+            sunMass: this.constants.sunMass,
         };
 
         //console.log(this.initialConditions);
-        //console.log(this.state.distance.value);
+        //console.log(this.currentConditions.distance.value);
         this.resetStateToInitialConditions();
 
         //********************************************************************************
     }
 
-    calculateDistanceAcceleration(state)
+    // basic physics formulas found at https://evgenii.com/blog/earth-orbit-simulation/
+    calculateDistanceAcceleration(currentState)
     {
-        // [acceleration of distance] = [distance][angular velocity]^2 - G * M / [distance]^2
-        return state.distance.value * Math.pow(state.angle.speed, 2) -
-            (this.constants.gravitationalConstant * state.massOfTheSunKg) / Math.pow(state.distance.value, 2);
+        return currentState.distance.value * Math.pow(currentState.angle.speed, 2) -
+            (this.constants.gravity * currentState.sunMass) / Math.pow(currentState.distance.value, 2);
     }
-    calculateAngleAcceleration(state)
+    calculateAngleAcceleration(currentState)
     {
-        // [acceleration of angle] = - 2[speed][angular velocity] / [distance]
-        return -2.0 * state.distance.speed * state.angle.speed / state.distance.value;
+        return -2.0 * currentState.distance.speed * currentState.angle.speed / currentState.distance.value;
     }
-    // Calculates a new value based on the time change and its derivative
-    // For example, it calculates the new distance based on the distance derivative (velocity)
-    // and the elapsed time interval.
-    newValue(currentValue, deltaT, derivative)
+    // Calculates a value based on distance dx (velocity)
+    // and the time delta
+    newValue(currentValue, timeDelta, dx)
     {
-        //console.log(derivative);
-        return currentValue + deltaT * derivative;
+        //console.log(dx);
+        return currentValue + timeDelta * dx;
     }
     resetStateToInitialConditions()
     {
-        this.state.distance.value = this.initialConditions.distance.value;
-        this.state.distance.speed = this.initialConditions.distance.speed;
+        this.currentConditions.distance.value = this.initialConditions.distance.value;
+        this.currentConditions.distance.speed = this.initialConditions.distance.speed;
 
-        this.state.angle.value = this.initialConditions.angle.value;
-        this.state.angle.speed = this.initialConditions.angle.speed;
+        this.currentConditions.angle.value = this.initialConditions.angle.value;
+        this.currentConditions.angle.speed = this.initialConditions.angle.speed;
     }
-    // The distance that is used for drawing on screen
+    // The on-screen distance conversion
     scaledDistance()
     {
-        return this.state.distance.value / this.scaleFactor;
+        return this.currentConditions.distance.value / this.scaleFactor;
     }
-    // The main function that is called on every animation frame.
-    // It calculates and updates the current positions of the bodies
+    // called on every update
     updatePosition()
     {
-        if (this.state.paused) { return; }
-        for (var i = 0; i < this.numberOfCalculationsPerFrame; i++)
+        for (var i = 0; i < this.calculationsPerTick; i++)
         {
             this.calculateNewPosition();
         }
@@ -174,33 +170,33 @@ class Planet
     calculateNewPosition()
     {
         // Calculate new distance
-        var distanceAcceleration = this.calculateDistanceAcceleration(this.state);
-        //console.log(this.state.distance.speed);
+        var distanceAcceleration = this.calculateDistanceAcceleration(this.currentConditions);
+        //console.log(this.currentConditions.distance.speed);
         //console.log(distanceAcceleration);
-        this.state.distance.speed = this.newValue(this.state.distance.speed, this.deltaT, distanceAcceleration);
-        this.state.distance.value = this.newValue(this.state.distance.value, this.deltaT, this.state.distance.speed);
+        this.currentConditions.distance.speed = this.newValue(this.currentConditions.distance.speed, this.timeDelta, distanceAcceleration);
+        this.currentConditions.distance.value = this.newValue(this.currentConditions.distance.value, this.timeDelta, this.currentConditions.distance.speed);
 
-        //console.log(this.state.distance.speed);
-        //console.log(this.state.distance.value);
+        //console.log(this.currentConditions.distance.speed);
+        //console.log(this.currentConditions.distance.value);
 
         // Calculate new angle
-        var angleAcceleration = this.calculateAngleAcceleration(this.state);
-        this.state.angle.speed = this.newValue(this.state.angle.speed, this.deltaT, angleAcceleration);
-        this.state.angle.value = this.newValue(this.state.angle.value, this.deltaT, this.state.angle.speed);
+        var angleAcceleration = this.calculateAngleAcceleration(this.currentConditions);
+        this.currentConditions.angle.speed = this.newValue(this.currentConditions.angle.speed, this.timeDelta, angleAcceleration);
+        this.currentConditions.angle.value = this.newValue(this.currentConditions.angle.value, this.timeDelta, this.currentConditions.angle.speed);
 
-        //console.log(this.state.angle.speed);
-        //console.log(this.state.angle.value);
+        //console.log(this.currentConditions.angle.speed);
+        //console.log(this.currentConditions.angle.value);
 
-        if (this.state.angle.value > 2 * Math.PI)
+        if (this.currentConditions.angle.value > 2 * Math.PI)
         {
-            this.state.angle.value = this.state.angle.value % (2 * Math.PI);
+            this.currentConditions.angle.value = this.currentConditions.angle.value % (2 * Math.PI);
         }
     }
 
     // Updates the mass of the Sun
     updateFromUserInput(solarMassMultiplier)
     {
-        this.state.massOfTheSunKg = this.constants.massOfTheSunKg * solarMassMultiplier;
+        this.currentConditions.sunMass = this.constants.sunMass * solarMassMultiplier;
     }
 
 
@@ -244,16 +240,9 @@ class Planet
         this.prevX = this.x;
         this.prevY = this.y;
 
-        //console.log(this.x);
-        // If field "isHeadingRight" is false, play fly left animation
-        if (this.isHeadingRight)
-        {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.planetsOrigins.xPos, this.planetsOrigins.yPos)
-        }
-        if (!this.isHeadingRight)
-        {
-            this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y)
-        }
+        this.hover.drawFrame(this.game.clockTick, ctx, this.planetsOrigins.xPos, this.planetsOrigins.yPos);
+
+
     }
 
 
@@ -288,12 +277,12 @@ class Planet
 
         this.updatePosition();
 
-        //console.log(this.state.angle.speed);
+        //console.log(this.currentConditions.angle.speed);
         //console.log(this.scaledDistance());
-        this.state.massOfTheSunKg = this.constants.massOfTheSunKg * this.sunsOrigin.mass
+        this.currentConditions.sunMass = this.constants.sunMass * this.sunsOrigin.mass
 
-        this.x = Math.cos(this.state.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
-        this.y = Math.sin(-this.state.angle.value) * this.scaledDistance() + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
+        this.x = Math.cos(this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
+        this.y = Math.sin(-this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
         //console.log(this.x);
         
 
