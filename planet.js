@@ -235,8 +235,8 @@ class Planet
             //this.ctx.restore();
             //this.ctx.beginPath();
             this.ctx.lineWidth = 2;
-            this.ctx.strokeStyle = "rgba(" + 238 + "," + 157 + "," + 16 + "," + 1 + ")";
-            this.ctx.setLineDash([.5, 20000]);
+            this.ctx.strokeStyle = "rgba(" + 255 + "," + 195 + "," + 0 + "," + 1 + ")";
+            this.ctx.setLineDash([.5, 5000]);
             //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
             this.ctx.moveTo(this.prevX, this.prevY);
             this.ctx.lineTo(this.x, this.y);
