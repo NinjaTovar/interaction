@@ -114,7 +114,7 @@ class Planet
                 speed: 0.00
             },
             angle: {
-                value: Math.PI / 6,
+                value: (Randomizer.returnRandomInt(3) * (Math.PI / Randomizer.returnRandomIntBetweenThese(1, 6))),
                 speed: this.constants.solarBodyVelocity
             }
         };
@@ -306,8 +306,8 @@ class Planet
         //console.log(this.scaledDistance());
         this.currentConditions.sunMass = this.constants.sunMass * this.sunsOrigin.mass
 
-        this.x = Math.cos(this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
-        this.y = Math.sin(-this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
+        this.x = Math.cos(this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.frameWidth * this.size) / 2;
+        this.y = Math.sin(-this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.y + (this.frameHeight * this.size) / 2;
 
         // hit box work
         this.circle.x = this.x;
