@@ -17,7 +17,6 @@ class GameEngine
         this.ctx = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
-        this.socket = io.connect("http://24.16.255.56:8888");
     }
 
     /**
@@ -263,7 +262,7 @@ class GameEngine
         // SOCKET IO======================================================================
         window.onload = function ()
         {
-            
+            this.socket = io.connect("http://24.16.255.56:8888");
 
             that.socket.on("connect", function (data)
             {
