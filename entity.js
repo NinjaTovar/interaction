@@ -19,9 +19,9 @@ class Entity
      * @param {any} removed Indicates whether the entity has been removed from world and 
      *                      should be updated
      */
-    constructor(game, x, y)
+    constructor(x, y)
     {
-        this.game = game;
+        //this.game = game;
         this.x = x;
         this.y = y;
     }
@@ -36,14 +36,14 @@ class Entity
      */
     draw(ctx)
     {
-        if (this.game.showOutlines && this.radius)
-        {
-            this.game.ctx.beginPath();
-            this.game.ctx.strokeStyle = 'green';
-            this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-            this.game.ctx.stroke();
-            this.game.ctx.closePath();
-        }
+        //if (this.game.showOutlines && this.radius)
+        //{
+        //    this.game.ctx.beginPath();
+        //    this.game.ctx.strokeStyle = 'green';
+        //    this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        //    this.game.ctx.stroke();
+        //    this.game.ctx.closePath();
+        //}
     }
 
     /**

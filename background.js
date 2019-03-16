@@ -11,7 +11,6 @@ class Background
     {
         this.x = 0;
         this.y = 0;
-        this.game = game;
         this.ctx = game.ctx;
         this.theGalaxies = theGalaxies
     }

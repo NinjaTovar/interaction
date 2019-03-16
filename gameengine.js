@@ -1,4 +1,4 @@
-/** 
+/**
  * GameEngine is the... game engine of the game world. Acts as the interface between
  * a user and the game world.
  */
@@ -155,15 +155,15 @@ class GameEngine
             solarDistance: 200
         };
         var planets = [];
-        planets.push(this.earthsOrigins);
-        planets.push(this.jupitersOrigins);
-        planets.push(this.moonssOrigins);
-        planets.push(this.deathstarsOrigins);
-        planets.push(this.marsOrigins);
-        planets.push(this.saturnsOrigins);
-        planets.push(this.plutosOrigins);
-        planets.push(this.vulcansOrigins);
-        planets.push(this.blackholesOrigins);
+        planets.push(this.earthsOrigins); //0
+        planets.push(this.jupitersOrigins); //1
+        planets.push(this.moonssOrigins); // 2
+        planets.push(this.deathstarsOrigins); // 3
+        planets.push(this.marsOrigins); // 4
+        planets.push(this.saturnsOrigins); // 5
+        planets.push(this.plutosOrigins); // 6
+        planets.push(this.vulcansOrigins); // 7
+        planets.push(this.blackholesOrigins); // 8
 
 
 
@@ -207,7 +207,7 @@ class GameEngine
 
         this.addEntity(new Sun(this, this.sunsOrigin));
         // add earth initially
-        this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0]), this.showOrbit);
+        this.addEntity(new Planet(this, this.sunsOrigin, planets[0].scale, planets[0].solarDistance, planets[0], this.showOrbit, 0));
 
         
 
@@ -218,8 +218,9 @@ class GameEngine
 
             //that.ctx.beginPath();
             var index = Randomizer.returnRandomIntBetweenThese(1, planets.length);
+
             that.addEntity(new Planet(that, that.sunsOrigin, planets[index].scale,
-                Randomizer.returnRandomIntBetweenThese(100, 800), planets[index]), that.showOrbit);
+                Randomizer.returnRandomIntBetweenThese(100, 800), planets[index]), that.showOrbit, index);
         };
 
         var showCircumgyration = document.getElementById('circumgyration');
@@ -257,6 +258,120 @@ class GameEngine
         this.initializeEventListeners();
 
         console.log('game initialized');
+
+        // SOCKET IO======================================================================
+        window.onload = function ()
+        {
+            var socket = io.connect("http://24.16.255.56:8888");
+
+            socket.on("connect", function (data)
+            {
+                console.log("Connected");
+            });
+
+            socket.on("load", function (data)
+            {
+                // empty array
+                that.entities = [];
+
+                // Initialize starting background
+                that.addEntity(new Background(that, galaxies));
+
+                // add sun back with and mass and radius
+                that.sunsOrigin = data.data[1].sunsOrigin;
+                that.addEntity(new Sun(that, that.sunsOrigin));
+
+                
+                for (let i = 2; i < data.data.length; i++)
+                {
+                    var index = 0;
+
+                    if (data.data[i].planetsOrigin.planet.includes("earth"))
+                    {
+                        index = 0;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("jupiter"))
+                    {
+                        index = 1;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("moon"))
+                    {
+                        index = 2;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("death"))
+                    {
+                        index = 3;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("mars"))
+                    {
+                        index = 4;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("saturn"))
+                    {
+                        index = 5;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("pluto"))
+                    {
+                        index = 6;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("vulcan"))
+                    {
+                        index = 7;
+                    }
+                    else if (data.data[i].planetsOrigin.planet.includes("black"))
+                    {
+                        index = 8;
+                    }
+                    planets.push(this.earthsOrigins); //0
+                    planets.push(this.jupitersOrigins); //1
+                    planets.push(this.moonssOrigins); // 2
+                    planets.push(this.deathstarsOrigins); // 3
+                    planets.push(this.marsOrigins); // 4
+                    planets.push(this.saturnsOrigins); // 5
+                    planets.push(this.plutosOrigins); // 6
+                    planets.push(this.vulcansOrigins); // 7
+                    planets.push(this.blackholesOrigins); // 8
+
+                    that.addEntity(new Planet(that, that.sunsOrigin, data.data[i].size, data.data[i].solarDistance, planets[index], data.data[i].showOrbit, index));
+
+
+                    that.entities[i].origin = data.data[i].stateMachine.origin;
+                    that.entities[i].origins = data.data[i].stateMachine.origins;
+                    that.entities[i].constants = data.data[i].stateMachine.constants;
+                    that.entities[i].initialConditions = data.data[i].stateMachine.initialConsidtions;
+                    that.entities[i].currentConditions = data.data[i].stateMachine.currentConditions;
+                    that.entities[i].circle = data.data[i].stateMachine.circle;
+                    that.entities[i].hitBox = data.data[i].stateMachine.hitBox;
+                    that.entities[i].showOrbit = data.data[i].stateMachine.showOrbit;
+
+                }
+
+
+            });
+
+            var text = document.getElementById("text");
+            var saveButton = document.getElementById("save");
+            var loadButton = document.getElementById("load");
+
+            saveButton.onclick = function ()
+            {
+                console.log("save");
+                text.innerHTML = "Saved."
+                socket.emit("save", { studentname: "Daniel Tovar", statename: "planetConditions", data: that.entities });
+                console.log(that.entities);
+            };
+
+            loadButton.onclick = function ()
+            {
+                console.log("load");
+                text.innerHTML = "Loaded."
+                socket.emit("load", { studentname: "Daniel Tovar", statename: "planetConditions" });
+
+
+            };
+        };
+
+            // SOCKET IO======================================================================
     }
 
     /** Starts the game world by getting the loop and callback circle started. */
@@ -304,47 +419,51 @@ class GameEngine
     /** Handles updating the entities world state. */
     update()
     {
-        let entitiesCount = this.entities.length;
-
-        var removeSolarbody = false;
-        var pos;
-
-        for (let i = 0; i < entitiesCount; i++)
+        if (this.entities.length > 0)
         {
-            let entity = this.entities[i];
+            let entitiesCount = this.entities.length;
 
-            // check if this entity needs removed
-            if (entity.destroyed)
+            var removeSolarbody = false;
+            var pos;
+
+            for (let i = 0; i < entitiesCount; i++)
             {
-                removeSolarbody = true;
-                pos = i;
+                let entity = this.entities[i];
 
+                // check if this entity needs removed
+                if (entity.destroyed)
+                {
+                    removeSolarbody = true;
+                    pos = i;
+
+                }
+                if (this.showOrbit)
+                {
+                    entity.showOrbit = true;
+                }
+                entity.update();
             }
-            if (this.showOrbit)
+
+            // remove if found to be destroyed
+            if (removeSolarbody)
             {
-                entity.showOrbit = true;
+                console.log(this.entities[pos]);
+                this.entities.splice(pos, 1);
+                console.log(this.entities);
+                removeSolarbody = false;
+                this.ctx.globalAlpha = .5;
             }
-            entity.update();
+            if (this.ctx.globalAlpha < .98)
+            {
+                this.ctx.globalAlpha += .01;
+            }
+            if (this.ctx.globalAlpha > .98)
+            {
+                this.middleProjectionCtx.fillStyle = "#FB00FE";
+                this.middleProjectionCtx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+            }
         }
 
-        // remove if found to be destroyed
-        if (removeSolarbody)
-        {
-            console.log(this.entities[pos]);
-            this.entities.splice(pos, 1);
-            console.log(this.entities);
-            removeSolarbody = false;
-            this.ctx.globalAlpha = .5;  
-        }
-        if (this.ctx.globalAlpha < .98)
-        {
-            this.ctx.globalAlpha += .01;
-        }
-        if (this.ctx.globalAlpha > .98)
-        {
-            this.middleProjectionCtx.fillStyle = "#FB00FE";
-            this.middleProjectionCtx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
-        }
 
     }
 

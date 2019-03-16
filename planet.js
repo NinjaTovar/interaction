@@ -16,7 +16,7 @@ class Planet
      * @param {any} startY Starting x position of the fly being constructed.
      * @param {any} size Size of scale for character.
      */
-    constructor(game, sunsOrigin, size, solarDistance, planetsOrigin, showOrbit)
+    constructor(game, sunsOrigin, size, solarDistance, planetsOrigin, showOrbit, index)
     {
         this.hover = new Animation
             (
@@ -30,17 +30,20 @@ class Planet
             size    // scale in relation to original image
             );
 
+        this.index = index;
         this.planetsOrigin = planetsOrigin;
         this.sunsOrigin = sunsOrigin;
         this.x;
         this.y;
         this.prevX = this.x;
         this.prevY = this.y;
-        this.game = game;
         this.ctx = game.ctx;
         this.showOrbit = showOrbit;
 
         this.mouseIsHeld = false;
+
+        this.clock = new Timer();
+        this.clockTick = this.clock.tick();
 
         this.radius = planetsOrigin.frameWidth / 2;
         this.circle = {
@@ -90,10 +93,6 @@ class Planet
             solarBodyVelocity: 1.990986 * Math.pow(10, -7),
             sunMass: 1.98855 * Math.pow(10, Randomizer.returnRandomFloat(29.5, 30.6))
         };
-        //if (this.game.firstCosmos === false)
-        //{
-        //    this.constants.astronomicalUnit = Math.pow(10, Randomizer.returnRandomFloat(10.87, 11.21));
-        //}
 
         // The length of one AU (Earth-Sun distance) in pixels.
         this.solarDistanceInPixels = this.solarDistance;
@@ -136,6 +135,7 @@ class Planet
         //console.log(this.currentConditions.distance.value);
         this.resetStateToInitialConditions();
 
+        this.stateMachine = {};
         //********************************************************************************
     }
 
@@ -232,17 +232,12 @@ class Planet
         }
         else if (this.showOrbit)
         {
-            //this.ctx.restore();
-            //this.ctx.beginPath();
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = "rgba(" + 255 + "," + 195 + "," + 0 + "," + 1 + ")";
             this.ctx.setLineDash([.5, 5000]);
-            //this.ctx.strokeStyle = 'hsl(' + 360 * Math.random() + ', 40%, 10%)';
             this.ctx.moveTo(this.prevX, this.prevY);
             this.ctx.lineTo(this.x, this.y);
             this.ctx.stroke();
-            //this.ctx.save();
-            
         }
 
 
@@ -252,7 +247,7 @@ class Planet
         this.prevX = this.x;
         this.prevY = this.y;
 
-        this.hover.drawFrame(this.game.clockTick, ctx, this.planetsOrigins.xPos, this.planetsOrigins.yPos);
+        this.hover.drawFrame(this.clockTick, ctx, this.planetsOrigins.xPos, this.planetsOrigins.yPos);
 
 
     }
@@ -262,48 +257,10 @@ class Planet
     /** Update handles updating the objects world state. */
     update()
     {
+        this.clockTick = this.clock.tick();
 
-        if (this.game.mouseIsHeld != undefined)
-        {
-            this.mouseIsHeld = this.game.mouseIsHeld;
-            //console.log(this.mouseIsHeld);
-        }
-        if (this.game.showOrbit != undefined)
-        {
-            this.showOrbit = this.game.showOrbit;
-            //console.log(this.mouseIsHeld);
-        }
-
-
-        //if (this.degrees < 360)
-        //{
-        //    this.degrees += 1;
-        //}
-        //else
-        //{
-        //    this.degrees = 0;
-        //}
-
-        //this.radians = this.degrees * (Math.PI / 180);
-
-        //this.x = (Math.cos(this.radians) * this.solarDistance) + this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale;
-        //this.y = (Math.sin(this.radians) * this.solarDistance) + this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale;
-
-        //var vectorTowardsOrigin = {
-        //    x: this.x - this.sunsOrigin.x,
-        //    y: this.y - this.sunsOrigin.y
-        //}
-
-        //console.log('Position:  ' + this.x + ", " + this.y);
-        //console.log('Vector: ' + vectorTowardsOrigin.x + ', ' + vectorTowardsOrigin.y);
-
-        //this.x -= vectorTowardsOrigin.x * this.G;
-        //this.y -= vectorTowardsOrigin.y * this.G;
-        //console.log(this.sunsOrigin.radius);
         this.updatePosition();
 
-        //console.log(this.currentConditions.angle.speed);
-        //console.log(this.scaledDistance());
         this.currentConditions.sunMass = this.constants.sunMass * this.sunsOrigin.mass
 
         this.x = Math.cos(this.currentConditions.angle.value) * this.scaledDistance() + this.sunsOrigin.x + (this.frameWidth * this.size) / 2;
@@ -316,7 +273,6 @@ class Planet
         var dx = this.circle.x - (this.sunsOrigin.x + (this.sunsOrigin.width / 2) * this.sunsOrigin.scale);
         var dy = this.circle.y - (this.sunsOrigin.y + (this.sunsOrigin.height / 2) * this.sunsOrigin.scale);
         var distance = Math.sqrt(dx * dx + dy * dy);
-        //console.log(distance > this.sunsOrigin.radius * this.sunsOrigin.scale);
 
         var that = this;
 
@@ -324,19 +280,23 @@ class Planet
         {
             this.destroyed = true;
         }
-        //this.game.entities.forEach(function (item, index, array)
-        //{
-        //    if (item.size == .2)
-        //    {
-        //        that.pos = index;
-        //        that.destroyed = true;
-        //    }
-
-        //});
 
         this.planetsOrigins.xPos = this.x - (this.frameWidth * this.size)/2;
-        this.planetsOrigins.yPos = this.y - (this.frameHeight * this.size)/2;
-            
+        this.planetsOrigins.yPos = this.y - (this.frameHeight * this.size) / 2;
+
+        this.stateMachine =
+            {
+            origin: this.planetsOrigin,
+            origins: this.planetsOrigins,
+            constants: this.constants,
+            initialConditions: this.initialConditions,
+            currentConditions: this.currentConditions,
+            circle: this.circle,
+            hitBox: this.hitBox,
+            showOrbit: this.showOrbit,
+            index: this.index
+            };
+
     }
 
 }

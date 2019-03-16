@@ -34,7 +34,6 @@ class Sun
         this.x = this.sunsOrigin.x;
         this.y = this.sunsOrigin.y;
         this.speed = 20;
-        this.game = game;
         this.ctx = game.ctx;
         this.isHeadingRight = true;
         this.currentScale = this.sunsOrigin.scale;
@@ -51,6 +50,9 @@ class Sun
         };
         this.showOutline = false;
         this.destroyed = false;
+
+        this.clock = new Timer();
+        this.clockTick = this.clock.tick();
     }
 
     // Methods
@@ -62,17 +64,7 @@ class Sun
      */
     draw(ctx)
     {
-        this.hover.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-
-        if (this.showOutline)
-        {
-            // hit box
-            //this.ctx.beginPath();
-            this.ctx.strokeStyle = 'white';
-            this.ctx.rect(this.x, this.y, this.hitBox.width, this.hitBox.height);
-            this.ctx.stroke();
-        }
-
+        this.hover.drawFrame(this.clockTick, ctx, this.x, this.y);
     }
 
 
@@ -80,7 +72,7 @@ class Sun
     /** Update handles updating the objects world state. */
     update()
     {
-
+        this.clockTick = this.clock.tick();
 
         if (this.currentScale !== this.sunsOrigin.scale)
         {
@@ -96,27 +88,6 @@ class Sun
                 this.sunsOrigin.scale    // scale in relation to original image
                 );
         }
-        if (this.isHeadingRight)
-        {
-            //this.x += this.game.clockTick * this.speed;
-        }
-        else if (!this.isHeadingRight)
-        {
-            //this.x -= this.game.clockTick * this.speed;
-        }
-
-        var that = this;
-        
-        this.game.entities.forEach(function (item, index, array)
-        {
-
-            if (item.size == .2)
-            {
-                that.pos = index;
-                //that.destroyed = true;
-            }
-
-        });
 
     }
 
