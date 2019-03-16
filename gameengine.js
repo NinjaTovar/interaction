@@ -262,7 +262,7 @@ class GameEngine
         // SOCKET IO======================================================================
         window.onload = function ()
         {
-            socket = io.connect("http://24.16.255.56:8888");
+            var socket = io.connect("http://24.16.255.56:8888");
 
             socket.on("connect", function (data)
             {
