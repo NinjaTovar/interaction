@@ -262,14 +262,14 @@ class GameEngine
         // SOCKET IO======================================================================
         window.onload = function ()
         {
-            this.socket = io.connect("http://24.16.255.56:8888");
+            socket = io.connect("http://24.16.255.56:8888");
 
-            that.socket.on("connect", function (data)
+            socket.on("connect", function (data)
             {
                 console.log("Connected");
             });
 
-            that.socket.on("load", function (data)
+            socket.on("load", function (data)
             {
                 // empty array
                 that.entities = [];
@@ -357,7 +357,7 @@ class GameEngine
             {
                 console.log("save");
                 text.innerHTML = "Saved."
-                that.socket.emit("save", { studentname: "Daniel Tovar", statename: "planetConditions", data: that.entities });
+                socket.emit("save", { studentname: "Daniel Tovar", statename: "planetConditions", data: that.entities });
                 console.log(that.entities);
             };
 
@@ -365,7 +365,7 @@ class GameEngine
             {
                 console.log("load");
                 text.innerHTML = "Loaded."
-                that.socket.emit("load", { studentname: "Daniel Tovar", statename: "planetConditions" });
+                socket.emit("load", { studentname: "Daniel Tovar", statename: "planetConditions" });
 
 
             };
